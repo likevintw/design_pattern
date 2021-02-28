@@ -1,59 +1,40 @@
 
-import copy
 
-# === Original ===
-class A(object):
-    def __init__(self, _para):
-        self.para = _para
-        print("Create class A")
-    def __str__(self):
-        return "para"+str(self.para)
+import prototype
 
-# === Prototype Pattern ===
-class Prototype(object):
-    def clone(self): return copy.deepcopy(self)
+class A(prototype.Prototype):
+    def __init__(self): print("A initial")
+    def say_hello(self): print("Hello A")
 
-class B(Prototype):
-    def __init__(self, _para):
-        self.para = _para
-        print("Create", str(_para), "with instance B")
-    def __str__(self):
-        return "para: "+str(self.para)
+class B(prototype.Prototype):
+    def __init__(self): print("B initial")
+    def say_hello(self): print("Hello B")
 
-class Interface(object):
-    def __init__(self):
-        self.units = {
-            1:B(1),
-            2:B(2)}
+class CreateObject:
+    def __init__(self, _object_unit):
+        self.unit = _object_unit
     def build_unit(self, _para):
-        return self.units.get(_para).clone()
+        return self.unit.get(_para).clone()
 
+
+# unit test
 if __name__ == "__main__":
-    # Case 1
-    # === Original ===
-    print("\nCase 1")
-    a1 = A(1)
-    print(a1)
-    a2 = A(2)
-    print(a2)
+    object_unit = {1:A(),2:B()} # only create object for once
+    creater = CreateObject(object_unit)
 
-    # Case 2
-    # === Prototype Pattern ===
-    print("\nCase 2")
-    interface =  Interface()
-    b1 = interface.build_unit(1)
-    b2 = interface.build_unit(1)
-    b3 = interface.build_unit(2)
-    b4 = interface.build_unit(2)
-    print(b1)
-    print(b2)
-    print(b3)
-    print(b4)
-    b1.para = "b1"
-    b2.para = "b2"
-    b3.para = "b3"
-    b4.para = "b4"
-    print(b1)
-    print(b2)
-    print(b3)
-    print(b4)
+
+    print("ask an object A for a1")
+    a1 = creater.build_unit(1)
+    a1.say_hello()
+
+    print("ask an object A for a2")
+    a2 = creater.build_unit(1)
+    a2.say_hello()
+
+    print("ask an object B for b1")
+    b1 = creater.build_unit(2)
+    b1.say_hello()
+
+    print("ask an object B for b2")
+    b2 = creater.build_unit(2)
+    b2.say_hello()
