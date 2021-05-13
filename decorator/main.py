@@ -6,6 +6,8 @@ time elapse
 
 import time
 
+# decorator 1
+
 
 class ShowResult():
 
@@ -23,6 +25,9 @@ class ShowResult():
         print("A __call__ end")
         return result
 
+# decorator 2
+
+
 class TimeElapse():
 
     def __init__(self, _function):
@@ -36,19 +41,22 @@ class TimeElapse():
         start_time = time.time()
         result = self.function(*_function)  # execute function
         print("B After Function")
-        print("Time elapse {} s for input = {}".format(n, time.time()-start_time))
+        print("B Time elapse {} s for input = {}".format(
+            n, time.time()-start_time))
         print("B __call__ end")
         return result
 
-@ShowResult # A
-@TimeElapse # B
-def fibonacci_number(_n):
-    print("fibonacci_number start")
-    if _n<=1: return _n
+
+@ShowResult  # A
+@TimeElapse  # B
+def fibonacci_number(_n):   # function
+    print("F fibonacci_number start")
+    if _n <= 1:
+        return _n
     first, second = 1, 1
     for i in range(2, _n):
         first, second = second, second+first
-    print("fibonacci_number end")
+    print("F fibonacci_number end")
     return second
 
 
@@ -56,13 +64,23 @@ if __name__ == '__main__':
     n = 100
     print(n, fibonacci_number(n))
 
+    # result
     """
-    TimeElapse __init__ start
-    TimeElapse __init__ end
-    TimeElapse __call__ start
-    fibonacci_number start
-    Time elapse 1 s for input = 3.504753112792969e-05
-    TimeElapse __call__ end
-    1 1
-
+    B __init__ start
+    B __init__ end
+    A __init__ start
+    A __init__ end
+    A __call__ start
+    A Before Function
+    B __call__ start
+    B Before Function
+    F fibonacci_number start
+    F fibonacci_number end
+    B After Function
+    B Time elapse 100 s for input = 2.3126602172851562e-05
+    B __call__ end
+    A After Function
+    A The result is: 354224848179261915075
+    A __call__ end
+    100 354224848179261915075
     """
